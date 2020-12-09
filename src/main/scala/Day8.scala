@@ -22,7 +22,7 @@ sealed trait Result {
 }
 case class Terminates(accumulatorValue : Int) extends Result
 case class InfiniteLoop(accumulatorValue : Int) extends Result
-  
+
 object Operation {
 
   def fromString(input : String) : Option[Operation] = {
