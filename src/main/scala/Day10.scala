@@ -3,13 +3,13 @@ object Day10 extends App {
 
   def getGapMap(chargers : List[Long]) : Map[Long, Long] = getGaps(chargers).groupBy(a => a).map(a => (a._1, a._2.size))
 
-  def getWaysICouldGoForward(from: Long, remaining : List[Long], soFar : Long) : Long = {
+  def getWaysICouldGoForward(from: Long, remaining : List[Long]) : Long = {
     remaining match {
       case Nil => 1
       case _ => {
         val options = remaining.takeWhile(_ <= from + 3L)
           options.map(
-            newTarget => getWaysICouldGoForward(newTarget, remaining.dropWhile(_ <= newTarget), soFar)).sum
+            newTarget => getWaysICouldGoForward(newTarget, remaining.dropWhile(_ <= newTarget))).sum
       }
     }
   }
@@ -30,7 +30,7 @@ object Day10 extends App {
 
   def findAnswer2(input: List[Long]): Long = {
     val threeGapped = breakdownIntoThreeGapped(List(0L), input.sorted)
-    val subResults = threeGapped.map(subList => getWaysICouldGoForward(subList.head, subList.tail, 1))
+    val subResults = threeGapped.map(subList => getWaysICouldGoForward(subList.head, subList.tail))
     subResults.foldLeft(1L)(_ * _)
   }
 
