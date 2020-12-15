@@ -15,7 +15,7 @@ case class Seat(isOccupied : Boolean) extends Square {
 
 case class LayoutMode(occupiedThreshold : Int, countingMode : Int)
 
-case class Layout(squares: List[List[Square]])(implicit mode : LayoutMode) {
+case class Layout(squares: Array[Array[Square]])(implicit mode : LayoutMode) {
   val maxI = squares.size - 1
   val maxJ = squares.head.size - 1
 
@@ -60,18 +60,20 @@ case class Layout(squares: List[List[Square]])(implicit mode : LayoutMode) {
       i <- squares.indices
       j <- squares(i).indices
       } yield permuteSquare(i, j)
-    ).toList.grouped(squares.head.size).toList)
+    ).toArray.grouped(squares.head.size).toArray)
   }
 
   def countOccupied : Int = {
     squares.map(_.count(_.isOccupied)).sum
   }
+
+  def sameAs(that : Layout) = (this.squares zip that.squares).forall( b => b._1.sameElements(b._2))
 }
 
 object Layout{
-  def fromInput(input: List[String])(implicit mode : LayoutMode) : Layout = {
+  def fromInput(input: Array[String])(implicit mode : LayoutMode) : Layout = {
     Layout(input.map(
-      _.toList.map {
+      _.toArray.map {
         case '.' => Floor
         case 'L' => Seat(false)
         case '#' => Seat(true)
@@ -84,21 +86,28 @@ object Layout{
 object Day11 extends App {
 
   val fileName = "/home/zoe/Work/Repositories/AdventOfCode/src/main/resources/Day11TestData"
-  val lines = scala.io.Source.fromFile(fileName).getLines().toList
+  val lines = scala.io.Source.fromFile(fileName).getLines().toArray
 
-  def permuteUntilStable(layout: Layout): Int = {
+  def permuteUntilStable(layout: Layout, previous : Int): Int = {
     val permutedLayout = layout.permuteIteration
-    if (permutedLayout == layout) layout.countOccupied else permuteUntilStable(permutedLayout)
+    val newCount = permutedLayout.countOccupied
+    if (newCount== previous) newCount else permuteUntilStable(permutedLayout, newCount)
   }
 
-  def findAnswer1(lines : List[String]) : Int = {
+  def findAnswer1(lines : Array[String]) : Int = {
+    println(java.time.LocalTime.now())
     implicit val mode = LayoutMode(4, 0)
-    permuteUntilStable(Layout.fromInput(lines))
+    val a =  permuteUntilStable(Layout.fromInput(lines),-1)
+    println(java.time.LocalTime.now())
+    a
   }
 
-  def findAnswer2(lines : List[String]) : Int = {
+  def findAnswer2(lines : Array[String]) : Int = {
+    println(java.time.LocalTime.now())
     implicit val mode = LayoutMode(5, 1)
-    permuteUntilStable(Layout.fromInput(lines))
+    val a = permuteUntilStable(Layout.fromInput(lines), -1)
+    println(java.time.LocalTime.now())
+    a
   }
 
   println(findAnswer1(lines))
