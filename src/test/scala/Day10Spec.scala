@@ -16,7 +16,7 @@ class Day10Spec extends AnyFlatSpec {
   }
 
   "breakdown into three gapped" should "give back a list divided into three-gapped segments" in {
-    Day10.breakdownIntoThreeGapped(List(0L), example1 ++ List(22L)) shouldBe List(List(0L, 1L), List(4L,5L,6L, 7L), List(10L, 11L,12L), List(15L, 16L))
+    Day10.breakdownIntoThreeGapped(List(0L), example1 ++ List(22L)) shouldBe List(List(0L, 1L), List(4L,5L,6L, 7L), List(10L, 11L,12L), List(15L, 16L), List(19L), List(22L))
   }
 
 

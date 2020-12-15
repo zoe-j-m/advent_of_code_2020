@@ -21,11 +21,9 @@ class Day7Spec extends AnyFlatSpec {
   }
 
   "example" should "give correct result" in {
-    println(exampleIn)
     val bags = Day7.getBags(exampleIn)
-    println(bags)
     bags.size shouldBe 9
-    Day7.findContains(List("shiny gold"), Set.empty, bags).size shouldBe 4
+    Day7.findContains(List("shiny gold"), Set.empty, bags).size shouldBe 5
   }
 
   "example" should "get correct bag totals" in {
